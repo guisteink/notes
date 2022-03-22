@@ -1,9 +1,12 @@
 const NoteModel = require("../models/note.model");
 
-exports.create = async () =>
+exports.create = async (req, res, next) =>
 {
     try {
+        const newNote = await NoteModel.create(req.body);
+        res.status(201).json(newNote);
     } catch (err) {
+        next(err);
     }
 };
 

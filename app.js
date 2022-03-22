@@ -1,9 +1,9 @@
 const express = require("express");
 const noteRoutes = require("./routes/notes.routes");
 const app = express();
-// const mongodb = require("./mongodb/mongodb.connect");
+const mongodb = require("./database/mongodb/connection");
 
-// mongodb.connect();
+mongodb.connect();
 
 app.use(express.json());
 
