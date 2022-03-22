@@ -1,0 +1,22 @@
+{
+  "name": "notes-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/guisteink/notes-app.git",
+  "author": "Guilherme Stein <guilherme.steink@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node server.js",
+    "test": "jest --watchAll"
+  },
+  "keywords": [],
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.6.9",
+    "node-mocks-http": "^1.7.6"
+  },
+  "devDependencies": {
+    "jest": "^24.9.0",
+    "supertest": "^4.0.2"
+  }
+}
