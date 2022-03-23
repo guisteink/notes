@@ -10,6 +10,20 @@ exports.create = async (req, res, next) =>
     }
 };
 
+exports.updateById = async (req, res, next) =>
+{
+    try {
+        const updatedNote = await NoteModel.findByIdAndUpdate(
+            req.params.noteId,
+            req.body,
+            { new: true, useFindAndModify: false }
+        )
+        return updatedNote ? res.status(200).json(updatedNote) : res.status(404).send()
+    } catch (err) {
+        next(err)
+    }
+};
+
 exports.listAll = async () =>
 {
     try {
@@ -24,13 +38,6 @@ exports.getById = async () =>
     }
 };
 
-exports.updateById = async () =>
-{
-    try {
-
-    } catch (err) {
-    }
-};
 
 exports.deleteById = async () =>
 {
