@@ -1,6 +1,7 @@
 const noteController = require('../../controllers/notes.controller');
 const noteModel = require('../../models/note.model');
 const newNote = require('../mock-data/newNote.json')
+const allNotes = require('../mock-data/allNotes.json');
 const httpMocks = require('node-mocks-http');
 
 jest.mock("../../models/note.model.js");
@@ -86,6 +87,39 @@ describe("\nNoteController.updateById", () =>
         const rejectedPromise = Promise.reject(errorMsg);
         noteModel.findByIdAndUpdate.mockReturnValue(rejectedPromise);
         await noteController.updateById(req, res, next);
+        expect(next).toHaveBeenCalledWith(errorMsg);
+    })
+
+})
+
+describe("\nnoteController.listAll", () =>
+{
+    it("should have a listAll function", () =>
+    {
+        expect(typeof noteController.listAll).toBe('function');
+    })
+
+    it("should call noteModel.find({})", async () =>
+    {
+        await noteController.listAll(req, res, next);
+        expect(noteModel.find).toHaveBeenCalledWith({});
+    })
+
+    it("should return response with status code 200 and all notes", async () =>
+    {
+        noteModel.find.mockReturnValue(allNotes);
+        await noteController.listAll(req, res, next);
+        expect(res.statusCode).toBe(200);
+        expect(res._isEndCalled()).toBeTruthy();
+        expect(res._getJSONData()).toStrictEqual(allNotes);
+    })
+
+    it("should handle errors", async () =>
+    {
+        const errorMsg = { message: 'Error finding notes' };
+        const rejectPromise = Promise.reject(errorMsg);
+        noteModel.find.mockReturnValue(rejectPromise);
+        await noteController.listAll(req, res, next);
         expect(next).toHaveBeenCalledWith(errorMsg);
     })
 

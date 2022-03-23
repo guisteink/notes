@@ -24,10 +24,13 @@ exports.updateById = async (req, res, next) =>
     }
 };
 
-exports.listAll = async () =>
+exports.listAll = async (req, res, next) =>
 {
     try {
+        const allNotes = await NoteModel.find({});
+        res.status(200).json(allNotes);
     } catch (err) {
+        next(err);
     }
 };
 
