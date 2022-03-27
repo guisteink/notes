@@ -34,17 +34,23 @@ exports.listAll = async (req, res, next) =>
     }
 };
 
-exports.getById = async () =>
+exports.getById = async (req, res, next) =>
 {
     try {
+        const findNote = await NoteModel.findById(req.params.noteId)
+        return findNote ? res.status(200).json(findNote) : res.status(404).send()
     } catch (err) {
+        next(err);
     }
 };
 
 
-exports.deleteById = async () =>
+exports.deleteById = async (req, res, next) =>
 {
     try {
+        const deletedNote = await NoteModel.findByIdAndDelete(req.params.noteId)
+        return deletedNote ? res.status(200).json(deletedNote) : res.status(404).send()
     } catch (err) {
+        next(err)
     }
 };

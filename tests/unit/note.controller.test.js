@@ -122,5 +122,79 @@ describe("\nnoteController.listAll", () =>
         await noteController.listAll(req, res, next);
         expect(next).toHaveBeenCalledWith(errorMsg);
     })
+})
+
+describe("\nnoteController.getById", () =>
+{
+    it("should have a getById function", () =>
+    {
+        expect(typeof noteController.getById).toBe('function');
+    })
+
+    it("should call noteModel.findById with route params", async () =>
+    {
+        req.params.noteId = noteId;
+        await noteController.getById(req, res, next);
+        expect(noteModel.findById).toBeCalledWith(noteId);
+    })
+
+    it("should return json body and response code 200", async () =>
+    {
+        noteModel.findById.mockReturnValue(newNote);
+        await noteController.getById(req, res, next);
+        expect(res.statusCode).toBe(200);
+        expect(res._getJSONData()).toStrictEqual(newNote);
+        expect(res._isEndCalled()).toBeTruthy();
+    })
+
+    it("should handle errors", async () =>
+    {
+        const errorMsg = { message: "error finding noteModel" };
+        const rejectPromise = Promise.reject(errorMsg);
+        noteModel.findById.mockReturnValue(rejectPromise);
+        await noteController.getById(req, res, next);
+        expect(next).toHaveBeenCalledWith(errorMsg);
+    })
+})
+
+describe("\nnoteController.deleteById", () =>
+{
+    it("should have a deleteById function", () =>
+    {
+        expect(typeof noteController.deleteById).toBe('function');
+    })
+
+    it("should call findByIdAndDelete", async () =>
+    {
+        req.params.noteId = noteId;
+        await noteController.deleteById(req, res, next);
+        expect(noteModel.findByIdAndDelete).toBeCalledWith(noteId);
+    })
+
+    it("should return 200 OK and deleted note", async () =>
+    {
+        noteModel.findByIdAndDelete.mockReturnValue(newNote);
+        await noteController.deleteById(req, res, next);
+        expect(res.statusCode).toBe(200);
+        expect(res._getJSONData()).toStrictEqual(newNote);
+        expect(res._isEndCalled()).toBeTruthy();
+    })
+
+    it("should handle 404 error", async () =>
+    {
+        noteModel.findByIdAndDelete.mockReturnValue(null);
+        await noteController.deleteById(req, res, next);
+        expect(res.statusCode).toBe(404);
+        expect(res._isEndCalled()).toBeTruthy();
+    })
+
+    it("should handle errors", async () =>
+    {
+        const errorMessage = { message: "Error deleting note"};
+        const rejectedPromise = Promise.reject(errorMessage);
+        noteModel.findByIdAndDelete.mockReturnValue(rejectedPromise);
+        await noteController.deleteById(req, res, next);
+        expect(next).toHaveBeenCalledWith(errorMessage);
+    })
 
 })
