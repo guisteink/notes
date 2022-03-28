@@ -4,8 +4,8 @@ const router = express.Router();
 
 router.post("/", noteController.create);
 router.get("/", noteController.listAll);
-router.get("/:todoId", noteController.getById);
-router.put("/:todoId", noteController.updateById);
-router.delete("/:todoId", noteController.deleteById);
+router.get("/:noteId", noteController.getById);
+router.put("/:noteId", noteController.updateById);
+router.delete("/:noteId", noteController.deleteById);
 
 module.exports = router;
