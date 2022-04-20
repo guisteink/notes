@@ -78,7 +78,7 @@ describe("\nNoteController.updateById", () =>
         await noteController.updateById(req, res, next);
         expect(res._isEndCalled()).toBeTruthy();
         expect(res.statusCode).toBe(200);
-        expect(res._getJSONData()).toStrictEqual(newNote);
+        expect(res._getData()).toStrictEqual(newNote);
     })
 
     it("should handle errors", async () =>
@@ -111,7 +111,7 @@ describe("\nnoteController.listAll", () =>
         await noteController.listAll(req, res, next);
         expect(res.statusCode).toBe(200);
         expect(res._isEndCalled()).toBeTruthy();
-        expect(res._getJSONData()).toStrictEqual(allNotes);
+        expect(res._getData()).toStrictEqual(allNotes);
     })
 
     it("should handle errors", async () =>
@@ -143,7 +143,7 @@ describe("\nnoteController.getById", () =>
         noteModel.findById.mockReturnValue(newNote);
         await noteController.getById(req, res, next);
         expect(res.statusCode).toBe(200);
-        expect(res._getJSONData()).toStrictEqual(newNote);
+        expect(res._getData()).toStrictEqual(newNote);
         expect(res._isEndCalled()).toBeTruthy();
     })
 
@@ -176,7 +176,7 @@ describe("\nnoteController.deleteById", () =>
         noteModel.findByIdAndDelete.mockReturnValue(newNote);
         await noteController.deleteById(req, res, next);
         expect(res.statusCode).toBe(200);
-        expect(res._getJSONData()).toStrictEqual(newNote);
+        expect(res._getData()).toStrictEqual(newNote);
         expect(res._isEndCalled()).toBeTruthy();
     })
 
@@ -190,7 +190,7 @@ describe("\nnoteController.deleteById", () =>
 
     it("should handle errors", async () =>
     {
-        const errorMessage = { message: "Error deleting note"};
+        const errorMessage = { message: "Error deleting note" };
         const rejectedPromise = Promise.reject(errorMessage);
         noteModel.findByIdAndDelete.mockReturnValue(rejectedPromise);
         await noteController.deleteById(req, res, next);
